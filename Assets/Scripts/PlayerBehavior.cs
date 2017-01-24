@@ -5,6 +5,8 @@ public class PlayerBehavior : MonoBehaviour {
 
 	public float speed;
 
+	Vector3 world;
+
 	private Touch initialTouch = new Touch();
 	private float distance = 0;
 	private bool hasSwiped = false;
@@ -12,6 +14,7 @@ public class PlayerBehavior : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
+		world = Camera.main.ScreenToWorldPoint (new Vector3 (Screen.width, Screen.height, 0.0f));
 	}
 	
 	// Update is called once per frame
@@ -66,6 +69,21 @@ public class PlayerBehavior : MonoBehaviour {
 		} else if (Input.GetKey (KeyCode.DownArrow)) {
 			y -= speed;
 		}
+
+		if (x > world.x) {
+			x = world.x;
+			print ("right edge");
+		} else if (x < -world.x) {
+			x = -world.x;
+			print ("left edge");
+		} else if (y < -world.y) {
+			y = -world.y;
+			print ("top edge");
+		} else if (y > world.y) {
+			y = world.y;
+			print ("bottom edge");
+		}
+
 		this.transform.position = new Vector3 (x, y, 0.0f);
 	}
 }
