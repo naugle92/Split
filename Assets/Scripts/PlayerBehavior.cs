@@ -102,22 +102,41 @@ public class PlayerBehavior : MonoBehaviour {
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			x -= speed;
+			moveX = -speed;
+			moveY = 0.0f;
 		} else if (Input.GetKey (KeyCode.RightArrow)) {
 			x += speed;
+			moveX = speed;
+			moveY = 0.0f;
 		} else if (Input.GetKey (KeyCode.UpArrow)) {
 			y += speed;
+			moveY = speed;
+			moveX = 0.0f;
 		} else if (Input.GetKey (KeyCode.DownArrow)) {
 			y -= speed;
+			moveY = -speed;
+			moveX = 0.0f;
 		}
+
+		x += moveX;
+		y += moveY;
 
 		if (x > world.x) {				//right edge
 			x = world.x;
+			moveX = 0.0f;
+			moveY = 0.0f;
 		} else if (x < -world.x) {		//left edge
 			x = -world.x;
+			moveX = 0.0f;
+			moveY = 0.0f;
 		} else if (y < -world.y) {		//bottom edge
 			y = -world.y;
+			moveX = 0.0f;
+			moveY = 0.0f;
 		} else if (y > world.y) {		//top edge
 			y = world.y;
+			moveX = 0.0f;
+			moveY = 0.0f;
 		}
 
 		this.transform.position = new Vector3 (x, y, 0.0f);
