@@ -21,12 +21,12 @@ public class PlayerBehavior : MonoBehaviour {
 		moveX = 0.0f;
 		moveY = 0.0f;
 	}
-	
+
+
 	// Update is called once per frame
 	void Update () {
 		ReadInput ();
 	}
-
 
 	//read for swipe inputs
 	void FixedUpdate() {
@@ -46,19 +46,15 @@ public class PlayerBehavior : MonoBehaviour {
 
 				if (distance > 50f) {
 					if (swipedSideways && deltaX > 0) {				//swipe left
-						print("left");
 						moveX = -speed;
 						moveY = 0.0f;
 					} else if (swipedSideways && deltaX < 0) { 		//swipe right
-						print("right");
 						moveX = speed;
 						moveY = 0.0f;
 					} else if (!swipedSideways && deltaY > 0) { 	//swipe down
-						print("down");
 						moveY = -speed;
 						moveX = 0.0f;
 					} else if (!swipedSideways && deltaY < 0) {		//swipe up
-						print("up");
 						moveY = speed;
 						moveX = 0.0f;
 					}
@@ -95,7 +91,7 @@ public class PlayerBehavior : MonoBehaviour {
 
 
 
-	//read for key inputs
+	//read for key inputs, this function is used for testing purposes
 	void ReadInput() {
 		float x = this.transform.position.x;
 		float y = this.transform.position.y;
