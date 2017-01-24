@@ -4,6 +4,9 @@ using System.Collections;
 public class PlayerBehavior : MonoBehaviour {
 
 	public float speed;
+	float moveX;
+	float moveY;
+
 
 	Vector3 world;
 
@@ -15,6 +18,8 @@ public class PlayerBehavior : MonoBehaviour {
 	void Start () {
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		world = Camera.main.ScreenToWorldPoint (new Vector3 (Screen.width, Screen.height, 0.0f));
+		moveX = 0.0f;
+		moveY = 0.0f;
 	}
 	
 	// Update is called once per frame
@@ -25,6 +30,11 @@ public class PlayerBehavior : MonoBehaviour {
 
 	//read for swipe inputs
 	void FixedUpdate() {
+
+		float x = this.transform.position.x;
+		float y = this.transform.position.y;
+
+
 		foreach (Touch t in Input.touches) {
 			if (t.phase == TouchPhase.Began) {
 				initialTouch = t;
@@ -37,12 +47,20 @@ public class PlayerBehavior : MonoBehaviour {
 				if (distance > 50f) {
 					if (swipedSideways && deltaX > 0) {				//swipe left
 						print("left");
+						moveX = -speed;
+						moveY = 0.0f;
 					} else if (swipedSideways && deltaX < 0) { 		//swipe right
 						print("right");
+						moveX = speed;
+						moveY = 0.0f;
 					} else if (!swipedSideways && deltaY > 0) { 	//swipe down
 						print("down");
+						moveY = -speed;
+						moveX = 0.0f;
 					} else if (!swipedSideways && deltaY < 0) {		//swipe up
 						print("up");
+						moveY = speed;
+						moveX = 0.0f;
 					}
 					hasSwiped = true;
 				}
@@ -51,6 +69,28 @@ public class PlayerBehavior : MonoBehaviour {
 				initialTouch = new Touch ();
 			}
 		}
+		x += moveX;
+		y += moveY;
+
+		if (x > world.x) {				//right edge
+			x = world.x;
+			moveX = 0.0f;
+			moveY = 0.0f;
+		} else if (x < -world.x) {		//left edge
+			x = -world.x;
+			moveX = 0.0f;
+			moveY = 0.0f;
+		} else if (y < -world.y) {		//bottom edge
+			y = -world.y;
+			moveX = 0.0f;
+			moveY = 0.0f;
+		} else if (y > world.y) {		//top edge
+			y = world.y;
+			moveX = 0.0f;
+			moveY = 0.0f;
+		}
+
+		this.transform.position = new Vector3 (x, y, 0.0f);
 	}
 
 
@@ -70,18 +110,14 @@ public class PlayerBehavior : MonoBehaviour {
 			y -= speed;
 		}
 
-		if (x > world.x) {
+		if (x > world.x) {				//right edge
 			x = world.x;
-			print ("right edge");
-		} else if (x < -world.x) {
+		} else if (x < -world.x) {		//left edge
 			x = -world.x;
-			print ("left edge");
-		} else if (y < -world.y) {
+		} else if (y < -world.y) {		//bottom edge
 			y = -world.y;
-			print ("top edge");
-		} else if (y > world.y) {
+		} else if (y > world.y) {		//top edge
 			y = world.y;
-			print ("bottom edge");
 		}
 
 		this.transform.position = new Vector3 (x, y, 0.0f);
