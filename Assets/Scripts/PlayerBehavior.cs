@@ -4,8 +4,8 @@ using System.Collections;
 public class PlayerBehavior : MonoBehaviour {
 
 	public float speed;
-	float moveX;
-	float moveY;
+	public float moveX = 0.0f;
+	public float moveY = 0.0f;
 
 
 	Vector3 world;
@@ -18,14 +18,12 @@ public class PlayerBehavior : MonoBehaviour {
 	void Start () {
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		world = Camera.main.ScreenToWorldPoint (new Vector3 (Screen.width, Screen.height, 0.0f));
-		moveX = 0.0f;
-		moveY = 0.0f;
 	}
 
 
 	// Update is called once per frame
 	void Update () {
-		ReadInput ();
+		//ReadInput ();
 	}
 
 	//read for swipe inputs
@@ -48,15 +46,19 @@ public class PlayerBehavior : MonoBehaviour {
 					if (swipedSideways && deltaX > 0) {				//swipe left
 						moveX = -speed;
 						moveY = 0.0f;
+						print ("left");
 					} else if (swipedSideways && deltaX < 0) { 		//swipe right
 						moveX = speed;
 						moveY = 0.0f;
+						print ("right");
 					} else if (!swipedSideways && deltaY > 0) { 	//swipe down
 						moveY = -speed;
 						moveX = 0.0f;
+						print ("down");
 					} else if (!swipedSideways && deltaY < 0) {		//swipe up
 						moveY = speed;
 						moveX = 0.0f;
+						print ("up");
 					}
 					hasSwiped = true;
 				}
@@ -70,20 +72,16 @@ public class PlayerBehavior : MonoBehaviour {
 
 		if (x > world.x) {				//right edge
 			x = world.x;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		} else if (x < -world.x) {		//left edge
 			x = -world.x;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		} else if (y < -world.y) {		//bottom edge
 			y = -world.y;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		} else if (y > world.y) {		//top edge
 			y = world.y;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		}
 
 		this.transform.position = new Vector3 (x, y, 0.0f);
@@ -119,22 +117,34 @@ public class PlayerBehavior : MonoBehaviour {
 
 		if (x > world.x) {				//right edge
 			x = world.x;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		} else if (x < -world.x) {		//left edge
 			x = -world.x;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		} else if (y < -world.y) {		//bottom edge
 			y = -world.y;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		} else if (y > world.y) {		//top edge
 			y = world.y;
-			moveX = 0.0f;
-			moveY = 0.0f;
+			killPlayer ();
 		}
 
 		this.transform.position = new Vector3 (x, y, 0.0f);
+	}
+
+	public void killPlayer() {
+		Destroy (this.gameObject);
+		GameObject go = GameObject.Find("Controller");
+		PlayerSpawn other = (PlayerSpawn) go.GetComponent(typeof(PlayerSpawn));
+		other.setPlayerExists();
+
+	}
+
+
+	public void SetMovers(Vector2 movement) {
+		moveX = movement.x;
+		moveY = movement.y;
+		print (moveX);
+		print (moveY);
 	}
 }
